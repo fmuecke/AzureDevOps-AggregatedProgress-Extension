@@ -6,7 +6,7 @@ import WIT_Client = require("TFS/WorkItemTracking/RestClient");
 import Contracts = require("TFS/WorkItemTracking/Contracts");
 import Utils_string = require("VSS/Utils/String");
 
-import { StoredFieldReferences } from "./wsjfModels";
+import { StoredFieldReferences } from "./progressModels";
 
 export class Settings {
     private _changeMade = false;
@@ -71,8 +71,8 @@ export class Settings {
                     case "effort":
                         that._selectedFields.effortField = fieldReferenceName;
                         break;
-                    case "wsjf":
-                        that._selectedFields.wsjfField = fieldReferenceName;
+                    case "progress":
+                        that._selectedFields.progressField = fieldReferenceName;
                         break;
                 }
                 that.updateSaveButton();
@@ -89,13 +89,13 @@ export class Settings {
         header = $("<div />").addClass("description-text bowtie").appendTo(hubContent);
         header.html(Utils_string.format(descriptionText));
 
-        $("<img src='https://www.scaledagileframework.com/wp-content/uploads/2014/07/Figure-2.-A-formula-for-calculating-WSJF.png' />").addClass("description-image").appendTo(hubContent);
+        //$("<img src='https://www.scaledagileframework.com/wp-content/uploads/2014/07/Figure-2.-A-formula-for-calculating-WSJF.png' />").addClass("description-image").appendTo(hubContent);
         
-        descriptionText = "You must add a custom decimal field from the {0} to each work item type you wish to compute WSJF.";
+        descriptionText = "You must add a custom decimal field from the {0} to each work item type you wish to compute the progress.";
         header = $("<div />").addClass("description-text bowtie").appendTo(hubContent);
         header.html(Utils_string.format(descriptionText, "<a target='_blank' href='" + uri +"'>process hub</a>"));
 
-        let container = $("<div />").addClass("wsjf-settings-container").appendTo(hubContent);
+        let container = $("<div />").addClass("progress-settings-container").appendTo(hubContent);
 
         var menubarOptions = {
             items: [
@@ -127,8 +127,8 @@ export class Settings {
         let effortContainer = $("<div />").addClass("settings-control").appendTo(container);
         $("<label />").text("Effort Field").appendTo(effortContainer);
 
-        let wsjfContainer = $("<div />").addClass("settings-control").appendTo(container);
-        $("<label />").text("WSJF Field").appendTo(wsjfContainer);            
+        let progressContainer = $("<div />").addClass("settings-control").appendTo(container);
+        $("<label />").text("Progress Field").appendTo(progressContainer);            
 
         VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData).then((dataService: IExtensionDataService) => {
             dataService.getValue<StoredFieldReferences>("storedFields").then((storedFields:StoredFieldReferences) => {
@@ -138,13 +138,13 @@ export class Settings {
                 }
                 else {
                     console.log("Failed to retrieve fields from storage, defaulting values")
-					//Enter in your config referenceName for "rvField" and "wsjfField"
+					//Enter in your config referenceName for "rvField" and "progressField"
                     this._selectedFields = {
                         bvField: "Microsoft.VSTS.Common.BusinessValue",
                         tcField: "Microsoft.VSTS.Common.TimeCriticality",
                         rvField: null,
                         effortField: "Microsoft.VSTS.Scheduling.Effort",
-                        wsjfField: null
+                        progressField: null
                     };
                 }
 
@@ -153,7 +153,7 @@ export class Settings {
                     Controls.create(Combo, tcContainer, this.getComboOptions("timeCriticality", fieldList, this._selectedFields.tcField));
                     Controls.create(Combo, rvContainer, this.getComboOptions("rroevalue", fieldList, this._selectedFields.rvField));
                     Controls.create(Combo, effortContainer, this.getComboOptions("effort", fieldList, this._selectedFields.effortField));
-                    Controls.create(Combo, wsjfContainer, this.getComboOptions("wsjf", fieldList, this._selectedFields.wsjfField));
+                    Controls.create(Combo, progressContainer, this.getComboOptions("progress", fieldList, this._selectedFields.progressField));
                     this.updateSaveButton();
 
                     VSS.notifyLoadSucceeded();
@@ -174,7 +174,7 @@ export class Settings {
 
     private updateSaveButton() {
         var buttonState = (this._selectedFields.bvField && this._selectedFields.tcField && this._selectedFields.rvField &&
-                            this._selectedFields.effortField && this._selectedFields.wsjfField) && this._changeMade
+                            this._selectedFields.effortField && this._selectedFields.progressField) && this._changeMade
                             ? Menus.MenuItemState.None : Menus.MenuItemState.Disabled;
 
         // Update the disabled state

@@ -4,7 +4,7 @@ import TFS_Wit_Contracts = require("TFS/WorkItemTracking/Contracts");
 import TFS_Wit_Client = require("TFS/WorkItemTracking/RestClient");
 import TFS_Wit_Services = require("TFS/WorkItemTracking/Services");
 
-import { StoredFieldReferences } from "./wsjfModels";
+import { StoredFieldReferences } from "./progressModels";
  
 function GetStoredFields(): IPromise<any> {
     var deferred = Q.defer();
@@ -27,72 +27,72 @@ function getWorkItemFormService()
     return TFS_Wit_Services.WorkItemFormService.getService();
 }
 
-function updateWSJFOnForm(storedFields:StoredFieldReferences) {
+function updateProgressOnForm(storedFields:StoredFieldReferences) {
     getWorkItemFormService().then((service) => {
         service.getFields().then((fields: TFS_Wit_Contracts.WorkItemField[]) => {
             var matchingBusinessValueFields = fields.filter(field => field.referenceName === storedFields.bvField);
             var matchingTimeCriticalityFields = fields.filter(field => field.referenceName === storedFields.tcField);
             var matchingRROEValueFields = fields.filter(field => field.referenceName === storedFields.rvField);
             var matchingEffortFields = fields.filter(field => field.referenceName === storedFields.effortField); 
-            var matchingWSJFFields = fields.filter(field => field.referenceName === storedFields.wsjfField);
+            var matchingProgressFields = fields.filter(field => field.referenceName === storedFields.progressField);
 
-            //If this work item type has WSJF, then update WSJF
+            //If this work item type has Progress, then update Progress
             if ((matchingBusinessValueFields.length > 0) &&
                 (matchingTimeCriticalityFields.length > 0) &&
                 (matchingRROEValueFields.length > 0) &&
                 (matchingEffortFields.length > 0) &&
-                (matchingWSJFFields.length > 0)) {
+                (matchingProgressFields.length > 0)) {
                 service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
                     var businessValue  = +values[storedFields.bvField];
                     var timeCriticality = +values[storedFields.tcField];
                     var rroevalue = +values[storedFields.rvField];
                     var effort = +values[storedFields.effortField];
 
-                    var wsjf = 0;
+                    var progress = 0;
                     if (effort > 0) {
-                        wsjf = (businessValue + timeCriticality + rroevalue)/effort;
+                        progress = (businessValue + timeCriticality + rroevalue)/effort;
                     }
                     
-                    service.setFieldValue(storedFields.wsjfField, wsjf);
+                    service.setFieldValue(storedFields.progressField, progress);
                 });
             }
         });
     });
 }
 
-function updateWSJFOnGrid(workItemId, storedFields:StoredFieldReferences):IPromise<any> {
-    let wsjfFields = [
+function updateProgressOnGrid(workItemId, storedFields:StoredFieldReferences):IPromise<any> {
+    let progressFields = [
         storedFields.bvField,
         storedFields.tcField,
         storedFields.rvField,
         storedFields.effortField,
-        storedFields.wsjfField
+        storedFields.progressField
     ];
 
     var deferred = Q.defer();
 
     var client = TFS_Wit_Client.getClient();
-    client.getWorkItem(workItemId, wsjfFields).then((workItem: TFS_Wit_Contracts.WorkItem) => {
-        if (storedFields.wsjfField !== undefined && storedFields.rvField !== undefined) {     
+    client.getWorkItem(workItemId, progressFields).then((workItem: TFS_Wit_Contracts.WorkItem) => {
+        if (storedFields.progressField !== undefined && storedFields.rvField !== undefined) {     
             var businessValue = +workItem.fields[storedFields.bvField];
             var timeCriticality = +workItem.fields[storedFields.tcField];
             var rroevalue = +workItem.fields [storedFields.rvField];
             var effort = +workItem.fields[storedFields.effortField];
 
-            var wsjf = 0;
+            var progress = 0;
             if (effort > 0) {
-                wsjf = (businessValue + timeCriticality + rroevalue)/effort;
+                progress = (businessValue + timeCriticality + rroevalue)/effort;
             }
 
             var document = [{
                 from: null,
                 op: "add",
-                path: '/fields/' + storedFields.wsjfField,
-                value: wsjf
+                path: '/fields/' + storedFields.progressField,
+                value: progress
             }];
 
-            // Only update the work item if the WSJF has changed
-            if (wsjf != workItem.fields[storedFields.wsjfField]) {
+            // Only update the work item if the progress has changed
+            if (progress != workItem.fields[storedFields.progressField]) {
                 client.updateWorkItem(document, workItemId).then((updatedWorkItem:TFS_Wit_Contracts.WorkItem) => {
                     deferred.resolve(updatedWorkItem);
                 });
@@ -103,7 +103,7 @@ function updateWSJFOnGrid(workItemId, storedFields:StoredFieldReferences):IPromi
         }
         else
         {
-            deferred.reject("Unable to calculate WSJF, please configure fields on the collection settings page.");
+            deferred.reject("Unable to calculate aggregated progress, please configure fields on the collection settings page.");
         }
     });
 
@@ -114,17 +114,17 @@ var formObserver = (context) => {
     return {
         onFieldChanged: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.wsjfField) {
+                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.progressField) {
                     //If one of fields in the calculation changes
                     if ((args.changedFields[storedFields.bvField] !== undefined) || 
                         (args.changedFields[storedFields.tcField] !== undefined) ||
                         (args.changedFields[storedFields.rvField] !== undefined) ||
                         (args.changedFields[storedFields.effortField] !== undefined)) {
-                            updateWSJFOnForm(storedFields);
+                            updateProgressOnForm(storedFields);
                         }
                 }
                 else {
-                    console.log("Unable to calculate WSJF, please configure fields on the collection settings page.");    
+                    console.log("Unable to calculate aggregated progress, please configure fields on the collection settings page.");    
                 }
             }, (reason) => {
                 console.log(reason);
@@ -133,11 +133,11 @@ var formObserver = (context) => {
         
         onLoaded: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.wsjfField) {
-                    updateWSJFOnForm(storedFields);
+                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.progressField) {
+                    updateProgressOnForm(storedFields);
                 }
                 else {
-                    console.log("Unable to calculate WSJF, please configure fields on the collection settings page.");
+                    console.log("Unable to calculate aggregated progress, please configure fields on the collection settings page.");
                 }
             }, (reason) => {
                 console.log(reason);
@@ -150,11 +150,11 @@ var contextProvider = (context) => {
     return {
         execute: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.wsjfField) {
+                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.progressField) {
                     var workItemIds = args.workItemIds;
                     var promises = [];
                     $.each(workItemIds, function(index, workItemId) {
-                        promises.push(updateWSJFOnGrid(workItemId, storedFields));
+                        promises.push(updateProgressOnGrid(workItemId, storedFields));
                     });
 
                     // Refresh view
@@ -165,7 +165,7 @@ var contextProvider = (context) => {
                     });
                 }
                 else {
-                    console.log("Unable to calculate WSJF, please configure fields on the collection settings page.");
+                    console.log("Unable to calculate aggregated progress, please configure fields on the collection settings page.");
                     //TODO: Disable context menu item
                 }
             }, (reason) => {
@@ -176,5 +176,5 @@ var contextProvider = (context) => {
 }
 
 let extensionContext = VSS.getExtensionContext();
-VSS.register(`${extensionContext.publisherId}.${extensionContext.extensionId}.wsjf-work-item-form-observer`, formObserver);
-VSS.register(`${extensionContext.publisherId}.${extensionContext.extensionId}.wsjf-contextMenu`, contextProvider);
+VSS.register(`${extensionContext.publisherId}.${extensionContext.extensionId}.progress-work-item-form-observer`, formObserver);
+VSS.register(`${extensionContext.publisherId}.${extensionContext.extensionId}.progress-contextMenu`, contextProvider);
