@@ -36,26 +36,23 @@ function updateProgressOnForm(storedFields:StoredFieldReferences) {
             //var matchingEffortFields = fields.filter(field => field.referenceName === storedFields.effortField); 
             var matchingProgressFields = fields.filter(field => field.referenceName === storedFields.progressField);
 
+			/*
             //If this work item type has Progress, then update Progress
-            if (//(matchingBusinessValueFields.length > 0) &&
-                //(matchingTimeCriticalityFields.length > 0) &&
-                //(matchingRROEValueFields.length > 0) &&
-                //(matchingEffortFields.length > 0) &&
-                (matchingProgressFields.length > 0)) {
-                //service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
-                    //var businessValue  = +values[storedFields.bvField];
-                    //var timeCriticality = +values[storedFields.tcField];
-                    //var rroevalue = +values[storedFields.rvField];
-                    //var effort = +values[storedFields.effortField];
+            if (matchingProgressFields.length > 0) {
+                /*service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
+                    var businessValue  = +values[storedFields.bvField];
+                    var timeCriticality = +values[storedFields.tcField];
+                    var rroevalue = +values[storedFields.rvField];
+                    var effort = +values[storedFields.effortField];
 
                     var progress = 0;
-                    //if (effort > 0) 
+                    if (effort > 0) {
 					{
                         progress = 5;//(businessValue + timeCriticality + rroevalue)/effort;
                     }
                     
                     service.setFieldValue(storedFields.progressField, progress);
-                });
+                });*/
             }
         });
     });
