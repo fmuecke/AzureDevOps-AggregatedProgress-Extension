@@ -1,11 +1,7 @@
 
-WSJF enables a **calculated field** for computing and storing WSJF on your work items.
+The Progress-Extension enables a **calculated field** for computing and storing the progress of your work items based on the state of their children.
 
-![WSJF displaying on the work item form](marketplace/WSJF_on_form.png)
-
-The [Scaled Agile Framework](http://www.scaledagileframework.com) defines [WSJF (Weighted Shortest Job First)](http://www.scaledagileframework.com/wsjf/) as a calculation of cost of delay vs. job size which can help teams prioritize their portfolio backlogs with the items contributing the highest ROI.
-
-![WSJF = (Business Value + Time Criticality - Risk Reduction | Opportunity Enablement Value)/Job Size](http://www.scaledagileframework.com/wp-content/uploads/2014/07/Figure-2.-A-formula-for-calculating-WSJF.png)
+<!--![WSJF displaying on the work item form](marketplace/WSJF_on_form.png)
 
 Four values are used to calculate WSJF:
 * **Business Value**
@@ -69,3 +65,4 @@ Because this extension requires the new work item form, it is only supported on 
 ```
 4. After this is done, open up your WSJF tab and adjust your settings:
 ![Mapping fields for calculation](marketplace/Settings.png)
+-->
