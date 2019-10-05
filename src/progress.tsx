@@ -28,7 +28,7 @@ function getWorkItemFormService()
 }
 
 function updateProgressOnForm(storedFields:StoredFieldReferences) {
-    getWorkItemFormService().then((service) => {
+    /*getWorkItemFormService().then((service) => {
         service.getFields().then((fields: TFS_Wit_Contracts.WorkItemField[]) => {
             //var matchingBusinessValueFields = fields.filter(field => field.referenceName === storedFields.bvField);
             //var matchingTimeCriticalityFields = fields.filter(field => field.referenceName === storedFields.tcField);
@@ -36,10 +36,10 @@ function updateProgressOnForm(storedFields:StoredFieldReferences) {
             //var matchingEffortFields = fields.filter(field => field.referenceName === storedFields.effortField); 
             var matchingProgressFields = fields.filter(field => field.referenceName === storedFields.progressField);
 
-			/*
+			
             //If this work item type has Progress, then update Progress
             if (matchingProgressFields.length > 0) {
-                /*service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
+                service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
                     var businessValue  = +values[storedFields.bvField];
                     var timeCriticality = +values[storedFields.tcField];
                     var rroevalue = +values[storedFields.rvField];
@@ -52,10 +52,10 @@ function updateProgressOnForm(storedFields:StoredFieldReferences) {
                     }
                     
                     service.setFieldValue(storedFields.progressField, progress);
-                });*/
+                });
             }
         });
-    });
+    });*/
 }
 
 function updateProgressOnGrid(workItemId, storedFields:StoredFieldReferences):IPromise<any> {
