@@ -31,28 +31,22 @@ function updateProgressOnForm(storedFields:StoredFieldReferences) {
 }
 
 function updateProgressOnGrid(workItemId, storedFields:StoredFieldReferences):IPromise<any> {
-    let progressFields = [
-        //storedFields.bvField,
-        //storedFields.tcField,
-        //storedFields.rvField,
-        //storedFields.effortField,
-        storedFields.progressField
-    ];
+    let progressFields = [storedFields.progressField];
 
     var deferred = Q.defer();
 
     var client = TFS_Wit_Client.getClient();
     client.getWorkItem(workItemId, progressFields).then((workItem: TFS_Wit_Contracts.WorkItem) => {
         if (storedFields.progressField !== undefined && storedFields.rvField !== undefined) {     
-            var businessValue = +workItem.fields[storedFields.bvField];
-            var timeCriticality = +workItem.fields[storedFields.tcField];
-            var rroevalue = +workItem.fields [storedFields.rvField];
+            //var businessValue = +workItem.fields[storedFields.bvField];
+            //var timeCriticality = +workItem.fields[storedFields.tcField];
+            //var rroevalue = +workItem.fields [storedFields.rvField];
             //var effort = +workItem.fields[storedFields.effortField];
 
             var progress = 0;
             //if (effort > 0) {
-                progress = 7;//(businessValue + timeCriticality + rroevalue)/effort;
-            }
+            //    progress = 7;//(businessValue + timeCriticality + rroevalue)/effort;
+            //}
 
             var document = [{
                 from: null,
