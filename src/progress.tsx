@@ -78,19 +78,14 @@ var formObserver = (context) => {
     return {
         onFieldChanged: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && 
-					//storedFields.bvField && 
-					//storedFields.effortField && 
-					//storedFields.tcField && 
-					//storedFields.rvField && 
-					storedFields.progressField) {
+                if (storedFields && storedFields.progressField) {
                     //If one of fields in the calculation changes
-                    if (true//(args.changedFields[storedFields.bvField] !== undefined) || 
-                        //(args.changedFields[storedFields.tcField] !== undefined) ||
-                        //(args.changedFields[storedFields.rvField] !== undefined) ||
-                        //(args.changedFields[storedFields.effortField] !== undefined)) {
+                    /*if ((args.changedFields[storedFields.bvField] !== undefined) || 
+                        (args.changedFields[storedFields.tcField] !== undefined) ||
+                        (args.changedFields[storedFields.rvField] !== undefined) ||
+                        (args.changedFields[storedFields.effortField] !== undefined)) {
                             updateProgressOnForm(storedFields);
-                        }
+                        }*/
                 }
                 else {
                     console.log("Unable to calculate aggregated progress, please configure fields on the collection settings page.");    
@@ -102,12 +97,7 @@ var formObserver = (context) => {
         
         onLoaded: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && 
-					//storedFields.bvField && 
-					//storedFields.effortField && 
-					//storedFields.tcField && 
-					//storedFields.rvField && 
-					storedFields.progressField) {
+                if (storedFields && storedFields.progressField) {
                     updateProgressOnForm(storedFields);
                 }
                 else {
@@ -124,12 +114,7 @@ var contextProvider = (context) => {
     return {
         execute: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && 
-					//storedFields.bvField && 
-					//storedFields.effortField && 
-					//storedFields.tcField && 
-					//storedFields.rvField && 
-					storedFields.progressField) {
+                if (storedFields && storedFields.progressField) {
                     var workItemIds = args.workItemIds;
                     var promises = [];
                     $.each(workItemIds, function(index, workItemId) {
