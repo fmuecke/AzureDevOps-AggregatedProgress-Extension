@@ -49,7 +49,8 @@ function updateProgressOnForm(storedFields:StoredFieldReferences) {
                     //var effort = +values[storedFields.effortField];
 
                     var progress = 0;
-                    //if (effort > 0) {
+                    //if (effort > 0) 
+					{
                         progress = 5;//(businessValue + timeCriticality + rroevalue)/effort;
                     }
                     
