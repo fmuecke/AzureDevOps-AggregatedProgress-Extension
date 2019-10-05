@@ -37,11 +37,7 @@ function updateProgressOnGrid(workItemId, storedFields:StoredFieldReferences):IP
 
     var client = TFS_Wit_Client.getClient();
     client.getWorkItem(workItemId, progressFields).then((workItem: TFS_Wit_Contracts.WorkItem) => {
-        if (storedFields.progressField !== undefined && storedFields.rvField !== undefined) {     
-            //var businessValue = +workItem.fields[storedFields.bvField];
-            //var timeCriticality = +workItem.fields[storedFields.tcField];
-            //var rroevalue = +workItem.fields [storedFields.rvField];
-            //var effort = +workItem.fields[storedFields.effortField];
+        if (storedFields.progressField !== undefined) {     
 
             var progress = 0;
             //if (effort > 0) {
