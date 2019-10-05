@@ -30,27 +30,27 @@ function getWorkItemFormService()
 function updateProgressOnForm(storedFields:StoredFieldReferences) {
     getWorkItemFormService().then((service) => {
         service.getFields().then((fields: TFS_Wit_Contracts.WorkItemField[]) => {
-            var matchingBusinessValueFields = fields.filter(field => field.referenceName === storedFields.bvField);
-            var matchingTimeCriticalityFields = fields.filter(field => field.referenceName === storedFields.tcField);
-            var matchingRROEValueFields = fields.filter(field => field.referenceName === storedFields.rvField);
-            var matchingEffortFields = fields.filter(field => field.referenceName === storedFields.effortField); 
+            //var matchingBusinessValueFields = fields.filter(field => field.referenceName === storedFields.bvField);
+            //var matchingTimeCriticalityFields = fields.filter(field => field.referenceName === storedFields.tcField);
+            //var matchingRROEValueFields = fields.filter(field => field.referenceName === storedFields.rvField);
+            //var matchingEffortFields = fields.filter(field => field.referenceName === storedFields.effortField); 
             var matchingProgressFields = fields.filter(field => field.referenceName === storedFields.progressField);
 
             //If this work item type has Progress, then update Progress
-            if ((matchingBusinessValueFields.length > 0) &&
-                (matchingTimeCriticalityFields.length > 0) &&
-                (matchingRROEValueFields.length > 0) &&
-                (matchingEffortFields.length > 0) &&
+            if (//(matchingBusinessValueFields.length > 0) &&
+                //(matchingTimeCriticalityFields.length > 0) &&
+                //(matchingRROEValueFields.length > 0) &&
+                //(matchingEffortFields.length > 0) &&
                 (matchingProgressFields.length > 0)) {
-                service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
-                    var businessValue  = +values[storedFields.bvField];
-                    var timeCriticality = +values[storedFields.tcField];
-                    var rroevalue = +values[storedFields.rvField];
-                    var effort = +values[storedFields.effortField];
+                //service.getFieldValues([storedFields.bvField, storedFields.tcField, storedFields.rvField, storedFields.effortField]).then((values) => {
+                    //var businessValue  = +values[storedFields.bvField];
+                    //var timeCriticality = +values[storedFields.tcField];
+                    //var rroevalue = +values[storedFields.rvField];
+                    //var effort = +values[storedFields.effortField];
 
                     var progress = 0;
-                    if (effort > 0) {
-                        progress = (businessValue + timeCriticality + rroevalue)/effort;
+                    //if (effort > 0) {
+                        progress = 5;//(businessValue + timeCriticality + rroevalue)/effort;
                     }
                     
                     service.setFieldValue(storedFields.progressField, progress);
@@ -62,10 +62,10 @@ function updateProgressOnForm(storedFields:StoredFieldReferences) {
 
 function updateProgressOnGrid(workItemId, storedFields:StoredFieldReferences):IPromise<any> {
     let progressFields = [
-        storedFields.bvField,
-        storedFields.tcField,
-        storedFields.rvField,
-        storedFields.effortField,
+        //storedFields.bvField,
+        //storedFields.tcField,
+        //storedFields.rvField,
+        //storedFields.effortField,
         storedFields.progressField
     ];
 
@@ -77,11 +77,11 @@ function updateProgressOnGrid(workItemId, storedFields:StoredFieldReferences):IP
             var businessValue = +workItem.fields[storedFields.bvField];
             var timeCriticality = +workItem.fields[storedFields.tcField];
             var rroevalue = +workItem.fields [storedFields.rvField];
-            var effort = +workItem.fields[storedFields.effortField];
+            //var effort = +workItem.fields[storedFields.effortField];
 
             var progress = 0;
-            if (effort > 0) {
-                progress = (businessValue + timeCriticality + rroevalue)/effort;
+            //if (effort > 0) {
+                progress = 7;//(businessValue + timeCriticality + rroevalue)/effort;
             }
 
             var document = [{
@@ -114,12 +114,17 @@ var formObserver = (context) => {
     return {
         onFieldChanged: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.progressField) {
+                if (storedFields && 
+					//storedFields.bvField && 
+					//storedFields.effortField && 
+					//storedFields.tcField && 
+					//storedFields.rvField && 
+					storedFields.progressField) {
                     //If one of fields in the calculation changes
-                    if ((args.changedFields[storedFields.bvField] !== undefined) || 
-                        (args.changedFields[storedFields.tcField] !== undefined) ||
-                        (args.changedFields[storedFields.rvField] !== undefined) ||
-                        (args.changedFields[storedFields.effortField] !== undefined)) {
+                    if (true//(args.changedFields[storedFields.bvField] !== undefined) || 
+                        //(args.changedFields[storedFields.tcField] !== undefined) ||
+                        //(args.changedFields[storedFields.rvField] !== undefined) ||
+                        //(args.changedFields[storedFields.effortField] !== undefined)) {
                             updateProgressOnForm(storedFields);
                         }
                 }
@@ -133,7 +138,12 @@ var formObserver = (context) => {
         
         onLoaded: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.progressField) {
+                if (storedFields && 
+					//storedFields.bvField && 
+					//storedFields.effortField && 
+					//storedFields.tcField && 
+					//storedFields.rvField && 
+					storedFields.progressField) {
                     updateProgressOnForm(storedFields);
                 }
                 else {
@@ -150,7 +160,12 @@ var contextProvider = (context) => {
     return {
         execute: function(args) {
             GetStoredFields().then((storedFields:StoredFieldReferences) => {
-                if (storedFields && storedFields.bvField && storedFields.effortField && storedFields.tcField && storedFields.rvField && storedFields.progressField) {
+                if (storedFields && 
+					//storedFields.bvField && 
+					//storedFields.effortField && 
+					//storedFields.tcField && 
+					//storedFields.rvField && 
+					storedFields.progressField) {
                     var workItemIds = args.workItemIds;
                     var promises = [];
                     $.each(workItemIds, function(index, workItemId) {

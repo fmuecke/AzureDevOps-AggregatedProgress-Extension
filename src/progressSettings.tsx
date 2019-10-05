@@ -60,17 +60,17 @@ export class Settings {
                 let fieldReferenceName: string = (this.getSelectedIndex() < 0) ? null : that.getFieldReferenceName(fieldName);
 
                 switch (this._id) {
-                    case "businessValue":
-                        that._selectedFields.bvField = fieldReferenceName;
-                        break;
-                    case "timeCriticality":
-                        that._selectedFields.tcField = fieldReferenceName;
-                        break;
-                    case "rroevalue":
-                        that._selectedFields.rvField = fieldReferenceName;
-                    case "effort":
-                        that._selectedFields.effortField = fieldReferenceName;
-                        break;
+                    //case "businessValue":
+                    //    that._selectedFields.bvField = fieldReferenceName;
+                    //   break;
+                    //case "timeCriticality":
+                    //    that._selectedFields.tcField = fieldReferenceName;
+                    //    break;
+                    //case "rroevalue":
+                    //    that._selectedFields.rvField = fieldReferenceName;
+                    //case "effort":
+                    //    that._selectedFields.effortField = fieldReferenceName;
+                    //    break;
                     case "progress":
                         that._selectedFields.progressField = fieldReferenceName;
                         break;
@@ -115,17 +115,17 @@ export class Settings {
         };
         this._menuBar = Controls.create<Menus.MenuBar, any>(Menus.MenuBar, container, menubarOptions);
 
-        let bvContainer = $("<div />").addClass("settings-control").appendTo(container);
-        $("<label />").text("Business Value Field").appendTo(bvContainer);
+        //let bvContainer = $("<div />").addClass("settings-control").appendTo(container);
+        //$("<label />").text("Business Value Field").appendTo(bvContainer);
 
-        let tcContainer = $("<div />").addClass("settings-control").appendTo(container);
-        $("<label />").text("Time Criticality Field").appendTo(tcContainer);
+        //let tcContainer = $("<div />").addClass("settings-control").appendTo(container);
+        //$("<label />").text("Time Criticality Field").appendTo(tcContainer);
 
-        let rvContainer = $("<div />").addClass("settings-control").appendTo(container);
-        $("<label />").text("RR-OE Values Field").appendTo(rvContainer);
+        //let rvContainer = $("<div />").addClass("settings-control").appendTo(container);
+        //$("<label />").text("RR-OE Values Field").appendTo(rvContainer);
 
-        let effortContainer = $("<div />").addClass("settings-control").appendTo(container);
-        $("<label />").text("Effort Field").appendTo(effortContainer);
+        //let effortContainer = $("<div />").addClass("settings-control").appendTo(container);
+        //$("<label />").text("Effort Field").appendTo(effortContainer);
 
         let progressContainer = $("<div />").addClass("settings-control").appendTo(container);
         $("<label />").text("Progress Field").appendTo(progressContainer);            
@@ -140,19 +140,19 @@ export class Settings {
                     console.log("Failed to retrieve fields from storage, defaulting values")
 					//Enter in your config referenceName for "rvField" and "progressField"
                     this._selectedFields = {
-                        bvField: "Microsoft.VSTS.Common.BusinessValue",
-                        tcField: "Microsoft.VSTS.Common.TimeCriticality",
-                        rvField: null,
-                        effortField: "Microsoft.VSTS.Scheduling.Effort",
+                        //bvField: "Microsoft.VSTS.Common.BusinessValue",
+                        //tcField: "Microsoft.VSTS.Common.TimeCriticality",
+                        //rvField: null,
+                        //effortField: "Microsoft.VSTS.Scheduling.Effort",
                         progressField: null
                     };
                 }
 
                 this.getSortedFieldsList().then((fieldList) => {
-                    Controls.create(Combo, bvContainer, this.getComboOptions("businessValue", fieldList, this._selectedFields.bvField));
-                    Controls.create(Combo, tcContainer, this.getComboOptions("timeCriticality", fieldList, this._selectedFields.tcField));
-                    Controls.create(Combo, rvContainer, this.getComboOptions("rroevalue", fieldList, this._selectedFields.rvField));
-                    Controls.create(Combo, effortContainer, this.getComboOptions("effort", fieldList, this._selectedFields.effortField));
+                    //Controls.create(Combo, bvContainer, this.getComboOptions("businessValue", fieldList, this._selectedFields.bvField));
+                    //Controls.create(Combo, tcContainer, this.getComboOptions("timeCriticality", fieldList, this._selectedFields.tcField));
+                    //Controls.create(Combo, rvContainer, this.getComboOptions("rroevalue", fieldList, this._selectedFields.rvField));
+                    //Controls.create(Combo, effortContainer, this.getComboOptions("effort", fieldList, this._selectedFields.effortField));
                     Controls.create(Combo, progressContainer, this.getComboOptions("progress", fieldList, this._selectedFields.progressField));
                     this.updateSaveButton();
 
@@ -173,8 +173,9 @@ export class Settings {
     } 
 
     private updateSaveButton() {
-        var buttonState = (this._selectedFields.bvField && this._selectedFields.tcField && this._selectedFields.rvField &&
-                            this._selectedFields.effortField && this._selectedFields.progressField) && this._changeMade
+        var buttonState = (//this._selectedFields.bvField && this._selectedFields.tcField && this._selectedFields.rvField &&
+                            //this._selectedFields.effortField && 
+							this._selectedFields.progressField) && this._changeMade
                             ? Menus.MenuItemState.None : Menus.MenuItemState.Disabled;
 
         // Update the disabled state
